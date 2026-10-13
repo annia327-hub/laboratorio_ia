@@ -14,12 +14,13 @@ volatile bool state_led = false;
 volatile bool btn_state = true;
 volatile bool btn_state_old;
 
-int adc_raw[NUM_POTS]; 
+int N;          // Variable para ingresar el numero de pots
 
 extern adc_oneshot_unit_handle_t adc1_handle;
 
 void app_main(void) {
     gpio_init();
+    N = leer_numero_consola();
     adc_init();
 
     btn_state_old = gpio_get_level(BOTON);

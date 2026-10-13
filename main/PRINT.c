@@ -9,8 +9,33 @@
 
 const char *TAG_PRINT = "PRINT";
 
-void print_adc_values(void)
+void print_adc_values(int N)
 {
-    ESP_LOGI(TAG_PRINT, "Pots -> P1: %4d | P2: %4d | P3: %4d | P4: %4d | P5: %4d", 
-             X_inputs[0], X_inputs[1], X_inputs[2], X_inputs[3], X_inputs[4]);
+    /*ESP_LOGI(TAG_PRINT, "Pots -> P1: %4d | P2: %4d | P3: %4d | P4: %4d | P5: %4d", 
+             X_inputs[0], X_inputs[1], X_inputs[2], X_inputs[3], X_inputs[4]);*/
+    
+    ESP_LOGI(TAG_PRINT, "Pots -> ");
+    for (int i = 0; i < N; i++)
+    {
+        ESP_LOGI(TAG_PRINT, "P%d: %d |", i+1, X_inputs[i]);
+    }
+    
+}
+
+int leer_numero_consola(void) {
+    ESP_LOGI(TAG_PRINT, " Ingresa el numero de pots: (1-%d): ", NUM_POTS_MAX);
+
+    while (true) {
+        int c = getchar();              // intenta leer una tecla
+
+        if (c == EOF) {                 // nadie ha escrito nada todavia
+            vTaskDelay(pdMS_TO_TICKS(50));
+            continue;                   // vuelve a intentar
+        }
+
+        if (c >= '1' && c <= '0' + NUM_POTS_MAX) {   // digito entre 1 y NUM_POTS
+            return c - '0';             // '3' (texto) -> 3 (numero)
+        }
+        // cualquier otra tecla (Enter, letras, 0, 7...) se ignora
+    }
 }

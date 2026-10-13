@@ -8,9 +8,10 @@
  *********************************************************************************************/
 
 #include "BSP.h"
- int X_inputs[NUM_POTS];
+int adc_raw[N]; 
+int X_inputs[N];
 
-const adc_channel_t pot_channels[NUM_POTS] = {
+const adc_channel_t pot_channels[N] = {
     ADC_CHANNEL_0, // GPIO 36
     ADC_CHANNEL_3, // GPIO 39
     ADC_CHANNEL_6, // GPIO 34
@@ -37,14 +38,14 @@ void adc_init(void)
     };
 
     // Configuración de los 5 canales
-    for (int i = 0; i < NUM_POTS; i++) {
+    for (int i = 0; i < N; i++) {
         adc_oneshot_config_channel(adc1_handle, pot_channels[i], &channel_config);
     }
 }
 
 void adc_read(void)
 {
-    for (int i = 0; i < NUM_POTS; i++)
+    for (int i = 0; i < N; i++)
     {
         adc_oneshot_read(adc1_handle, pot_channels[i], &adc_raw[i]);
     }   
@@ -52,15 +53,11 @@ void adc_read(void)
 
 void adc_to_binary(void)
 {
-    for (int i = 0; i < NUM_POTS; i++)
+    for (int i = 0; i < N; i++)
     {
         if (adc_raw[i] > UMBRAL_ADC)
-        {
             X_inputs[i] = 1; // Superó el umbral
-        }
         else
-        {
             X_inputs[i] = 0; // Está por debajo del umbral
-        }
     }
 }

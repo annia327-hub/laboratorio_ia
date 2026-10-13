@@ -32,16 +32,18 @@ extern const char *TAG;
 #define BOTON 18
 #define LED 5
 #define UMBRAL_ADC 2048
-#define NUM_POTS 5
-
-extern const adc_channel_t pot_channels[NUM_POTS];
+#define NUM_POTS_MAX 5
 
 // VARIABLES GLOBALES COMPARTIDAS EN EL PROYECTO
 extern volatile bool system_ON;
 extern volatile bool state_led;
 
-extern int adc_raw[NUM_POTS];
-extern int X_inputs[NUM_POTS];
+extern int N;
+
+extern int adc_raw[N];
+extern int X_inputs[N];
+
+extern const adc_channel_t pot_channels[N];
 
 // PROTOTIPOS DE FUNCIONES
 void gpio_init(void);
@@ -50,7 +52,6 @@ void adc_init(void);
 void print_adc_values(void);
 void adc_read(void);
 void adc_to_binary(void);
-
-
+int leer_numero_consola(void);
 
 #endif
