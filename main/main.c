@@ -21,6 +21,7 @@ extern adc_oneshot_unit_handle_t adc1_handle;
 void app_main(void) {
     gpio_init();
     N = leer_numero_consola();
+    ESP_LOGI(TAG, "Se seleccionaron %d pots", N);
     adc_init();
 
     btn_state_old = gpio_get_level(BOTON);

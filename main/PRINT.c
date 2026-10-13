@@ -11,15 +11,13 @@ const char *TAG_PRINT = "PRINT";
 
 void print_adc_values(int N)
 {
-    /*ESP_LOGI(TAG_PRINT, "Pots -> P1: %4d | P2: %4d | P3: %4d | P4: %4d | P5: %4d", 
-             X_inputs[0], X_inputs[1], X_inputs[2], X_inputs[3], X_inputs[4]);*/
-    
-    ESP_LOGI(TAG_PRINT, "Pots -> ");
+    // Rutina de impresion de valores del adc dependiendo del numero de pots
+    printf("Pots ->  ");
     for (int i = 0; i < N; i++)
     {
-        ESP_LOGI(TAG_PRINT, "P%d: %d |", i+1, X_inputs[i]);
+        printf( "P%d: %d  ", i+1, X_inputs[i]);
     }
-    
+    puts("");
 }
 
 int leer_numero_consola(void) {
