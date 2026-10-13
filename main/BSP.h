@@ -9,7 +9,7 @@
 #ifndef BSP_H
 #define BSP_H
 
-//LIBRERIAS
+//Librerias
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -28,24 +28,26 @@
 
 extern const char *TAG;
 
-//DEFINICIONES DE PINES
+//Definiciones de pines
 #define BOTON 18
-#define LED 5
+#define LED 2
 #define UMBRAL_ADC 2048
 #define NUM_POTS_MAX 5
 
-// VARIABLES GLOBALES COMPARTIDAS EN EL PROYECTO
+// Variables globales compartidas en el proyecto
 extern volatile bool system_ON;
 extern volatile bool state_led;
 
-extern int N;
+// Variables para la impresion
+extern int N;           // Variable para guardar el numero de pots seleccionado
+extern int compuerta;   // Variable para guardar la compuerte seleccionada
 
 extern int adc_raw[NUM_POTS_MAX];
 extern int X_inputs[NUM_POTS_MAX];
 
 extern const adc_channel_t pot_channels[NUM_POTS_MAX];
 
-// PROTOTIPOS DE FUNCIONES
+// Prototipos de funciones
 void gpio_init(void);
 bool boton_presionado(void);
 void adc_init(void);
@@ -53,5 +55,6 @@ void print_adc_values(int N);
 void adc_read(void);
 void adc_to_binary(void);
 int leer_numero_consola(void);
+int leer_compuerta(void);
 
 #endif

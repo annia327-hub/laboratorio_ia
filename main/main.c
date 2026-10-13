@@ -14,14 +14,23 @@ volatile bool state_led = false;
 volatile bool btn_state = true;
 volatile bool btn_state_old;
 
-int N;          // Variable para ingresar el numero de pots
+int N;           // Variable para guardar el numero de pots seleccionado
+int compuerta;   // Variable para guardar la compuerte seleccionada
 
 extern adc_oneshot_unit_handle_t adc1_handle;
 
 void app_main(void) {
     gpio_init();
+
     N = leer_numero_consola();
     ESP_LOGI(TAG, "Se seleccionaron %d pots", N);
+
+    compuerta = leer_compuerta();
+    if(compuerta == 1)
+        ESP_LOGI(TAG, "Se selecciono la compuerta AND");
+    else
+        ESP_LOGI(TAG, "Se selecciono la compuerta OR");
+
     adc_init();
 
     btn_state_old = gpio_get_level(BOTON);
