@@ -45,7 +45,7 @@ void app_main(void) {
 
         if(system_ON) {
            adc_read();
-           print_adc_values();
+           print_adc_values(N);
            adc_to_binary();
            vTaskDelay(pdMS_TO_TICKS(200));
         }

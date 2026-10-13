@@ -40,16 +40,16 @@ extern volatile bool state_led;
 
 extern int N;
 
-extern int adc_raw[N];
-extern int X_inputs[N];
+extern int adc_raw[NUM_POTS_MAX];
+extern int X_inputs[NUM_POTS_MAX];
 
-extern const adc_channel_t pot_channels[N];
+extern const adc_channel_t pot_channels[NUM_POTS_MAX];
 
 // PROTOTIPOS DE FUNCIONES
 void gpio_init(void);
 bool boton_presionado(void);
 void adc_init(void);
-void print_adc_values(void);
+void print_adc_values(int N);
 void adc_read(void);
 void adc_to_binary(void);
 int leer_numero_consola(void);

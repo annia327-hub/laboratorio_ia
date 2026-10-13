@@ -8,10 +8,10 @@
  *********************************************************************************************/
 
 #include "BSP.h"
-int adc_raw[N]; 
-int X_inputs[N];
+int adc_raw[NUM_POTS_MAX]; 
+int X_inputs[NUM_POTS_MAX];
 
-const adc_channel_t pot_channels[N] = {
+const adc_channel_t pot_channels[NUM_POTS_MAX] = {
     ADC_CHANNEL_0, // GPIO 36
     ADC_CHANNEL_3, // GPIO 39
     ADC_CHANNEL_6, // GPIO 34
