@@ -11,11 +11,11 @@
  int X_inputs[NUM_POTS];
 
 const adc_channel_t pot_channels[NUM_POTS] = {
+    ADC_CHANNEL_0, // GPIO 36
+    ADC_CHANNEL_3, // GPIO 39
     ADC_CHANNEL_6, // GPIO 34
     ADC_CHANNEL_7, // GPIO 35
-    ADC_CHANNEL_4, // GPIO 32
-    ADC_CHANNEL_5, // GPIO 33
-    ADC_CHANNEL_0  // GPIO 36
+    ADC_CHANNEL_4  // GPIO 32
 };
 
 adc_oneshot_unit_handle_t adc1_handle;
