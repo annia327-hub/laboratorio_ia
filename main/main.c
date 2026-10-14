@@ -7,6 +7,7 @@
  * @overview: Archivo main del Laboratorio 5 de IA
  *********************************************************************************************/
 #include "BSP.h"
+#include "PERCEPTRON.h"
 
 volatile bool system_ON = false;
 volatile bool state_led = false;
@@ -14,15 +15,43 @@ volatile bool state_led = false;
 volatile bool btn_state = true;
 volatile bool btn_state_old;
 
-int N;          // Variable para ingresar el numero de pots
+int n_entradas;     // Numero de pots que usa el sistema (1 a NUM_POTS_MAX)
+int compuerta;      // 1 = AND, 2 = OR
+
+double *w;          // Pesos del perceptron (N valores)
+double b;           // Bias del perceptron
 
 extern adc_oneshot_unit_handle_t adc1_handle;
 
 void app_main(void) {
     gpio_init();
-    N = leer_numero_consola();
-    ESP_LOGI(TAG, "Se seleccionaron %d pots", N);
+
+    n_entradas = leer_numero_consola();
+    ESP_LOGI(TAG, "Se seleccionaron %d pots", n_entradas);
+
+    compuerta = leer_compuerta();
+    ESP_LOGI(TAG, "Compuerta = %s", (compuerta == COMP_AND) ? "AND" : "OR");
+
     adc_init();
+
+    // ===== ENTRENAMIENTO DEL PERCEPTRON (una sola vez) =====
+    int patrones = 1 << n_entradas;                              // 2^N combinaciones
+    double *X = malloc(patrones * n_entradas * sizeof(double));  // tabla de entradas
+    int *d = malloc(patrones * sizeof(int));                     // salida deseada
+    w = malloc(n_entradas * sizeof(double));                     // pesos
+
+    if (X == NULL || d == NULL || w == NULL) {
+        ESP_LOGE(TAG, "No hay memoria");
+        return;
+    }
+
+    generar_patrones(X, n_entradas, patrones);
+    generar_tabla_verdad(d, patrones, compuerta);
+    int aciertos = entrenar_perceptron(X, d, n_entradas, patrones, w, &b);
+    print_resultados(X, d, w, b, n_entradas, patrones, aciertos);
+    free(X);
+    free(d);
+    // ========================================================
 
     btn_state_old = gpio_get_level(BOTON);
 
@@ -46,12 +75,18 @@ void app_main(void) {
 
         if(system_ON) {
            adc_read();
-           print_adc_values(N);
            adc_to_binary();
+           print_adc_values(n_entradas);
+
+           double x[NUM_POTS_MAX];
+           for (int j = 0; j < n_entradas; j++) {
+               x[j] = X_inputs[j];
+           }
+           int salida = (producto_punto(w, x, n_entradas) + b >= 0.0) ? 1 : 0;
+           ESP_LOGI(TAG, "Salida del perceptron = %d", salida);
+
            vTaskDelay(pdMS_TO_TICKS(200));
         }
         vTaskDelay(pdMS_TO_TICKS(10));  
     }
 }
-
-
