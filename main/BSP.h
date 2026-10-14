@@ -30,7 +30,7 @@ extern const char *TAG;
 
 //Definiciones de pines
 #define BOTON 18
-#define LED 5
+#define LED 2
 #define UMBRAL_ADC 2048
 #define NUM_POTS_MAX 5
 #define COMP_AND 1      // <-- nuevos
@@ -58,5 +58,7 @@ void adc_read(void);
 void adc_to_binary(void);
 int leer_numero_consola(void);
 int leer_compuerta(void);
+void print_resultados(const double *X, const int *d, const double *w, double b,
+                      int entradas, int patrones, int aciertos);
 
 #endif
