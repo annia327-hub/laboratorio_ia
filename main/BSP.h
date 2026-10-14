@@ -60,5 +60,8 @@ int leer_numero_consola(void);
 int leer_compuerta(void);
 void print_resultados(const double *X, const int *d, const double *w, double b,
                       int entradas, int patrones, int aciertos);
+void hmi_enviar_config(int entradas, int compuerta, const double *w, double bias);
+void hmi_enviar_estado(bool run);
+void hmi_enviar_datos(int entradas, int salida);
 
 #endif

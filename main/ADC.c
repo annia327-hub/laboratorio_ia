@@ -21,40 +21,31 @@ const adc_channel_t pot_channels[NUM_POTS_MAX] = {
 
 adc_oneshot_unit_handle_t adc1_handle;
 
-void adc_init(void)
-{
+void adc_init(void) {
     //Configuración de la unidad ADC1
-    adc_oneshot_unit_init_cfg_t init_config1 = 
-    {
+    adc_oneshot_unit_init_cfg_t init_config1 =  {
         .unit_id = ADC_UNIT_1,
     };
     adc_oneshot_new_unit(&init_config1, &adc1_handle);
 
     //Configuración de la resolución y atenuación de los canales ADC
-    adc_oneshot_chan_cfg_t channel_config = 
-    {
+    adc_oneshot_chan_cfg_t channel_config = {
         .bitwidth = ADC_BITWIDTH_12, // 12 bits (0 a 4095)
         .atten = ADC_ATTEN_DB_12,          
     };
 
     // Configuración de los 5 canales
-    for (int i = 0; i < n_entradas; i++) {
+    for (int i = 0; i < n_entradas; i++)
         adc_oneshot_config_channel(adc1_handle, pot_channels[i], &channel_config);
-    }
 }
 
-void adc_read(void)
-{
+void adc_read(void) {
     for (int i = 0; i < n_entradas; i++)
-    {
         adc_oneshot_read(adc1_handle, pot_channels[i], &adc_raw[i]);
-    }   
 }
 
-void adc_to_binary(void)
-{
-    for (int i = 0; i < n_entradas; i++)
-    {
+void adc_to_binary(void) {
+    for (int i = 0; i < n_entradas; i++) {
         if (adc_raw[i] > UMBRAL_ADC)
             X_inputs[i] = 1; // Superó el umbral
         else
