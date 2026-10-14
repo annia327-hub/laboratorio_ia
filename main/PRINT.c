@@ -6,14 +6,15 @@
  * @overview: Módulo de consola para impresión de datos del sistema (PRINT.c)
  *********************************************************************************************/
 #include "BSP.h"
+#include "PERCEPTRON.h"
 
 const char *TAG_PRINT = "PRINT";
 
-void print_adc_values(int N)
+void print_adc_values(int n_entradas)
 {
     // Rutina de impresion de valores del adc dependiendo del numero de pots
     printf("Pots ->  ");
-    for (int i = 0; i < N; i++)
+    for (int i = 0; i < n_entradas; i++)
     {
         printf( "P%d: %d  ", i+1, X_inputs[i]);
     }
@@ -53,5 +54,15 @@ int leer_compuerta(void) {
             return c - '0';
         }
         // cualquier otra tecla se ignora
+    }
+}
+
+void print_tabla_verdad(const double *X, const int *d, int entradas, int patrones) {
+    for (int i = 0; i < patrones; i++) {
+        printf("[");
+        for (int j = 0; j < entradas; j++) {
+            printf("%.0f ", X[i * entradas + j]);
+        }
+        printf("] -> %d\n", d[i]);
     }
 }

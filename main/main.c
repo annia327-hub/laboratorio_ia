@@ -7,6 +7,7 @@
  * @overview: Archivo main del Laboratorio 5 de IA
  *********************************************************************************************/
 #include "BSP.h"
+#include "PERCEPTRON.h"
 
 volatile bool system_ON = false;
 volatile bool state_led = false;
@@ -14,24 +15,38 @@ volatile bool state_led = false;
 volatile bool btn_state = true;
 volatile bool btn_state_old;
 
-int N;           // Variable para guardar el numero de pots seleccionado
-int compuerta;   // Variable para guardar la compuerte seleccionada
+int n_entradas;     // Numero de pots que usa el sistema (1 a NUM_POTS_MAX)
+int compuerta;      // 1 = AND, 2 = OR
 
 extern adc_oneshot_unit_handle_t adc1_handle;
 
 void app_main(void) {
     gpio_init();
 
-    N = leer_numero_consola();
-    ESP_LOGI(TAG, "Se seleccionaron %d pots", N);
+    n_entradas = leer_numero_consola();
+    ESP_LOGI(TAG, "Se seleccionaron %d pots", n_entradas);
 
     compuerta = leer_compuerta();
-    if(compuerta == 1)
-        ESP_LOGI(TAG, "Se selecciono la compuerta AND");
-    else
-        ESP_LOGI(TAG, "Se selecciono la compuerta OR");
+    ESP_LOGI(TAG, "Compuerta = %s", (compuerta == COMP_AND) ? "AND" : "OR");
 
     adc_init();
+
+    // ===== BLOQUE DE PRUEBA (temporal): tabla de verdad =====
+    int patrones = 1 << n_entradas;                              // 2^N combinaciones
+    double *X = malloc(patrones * n_entradas * sizeof(double));  // memoria dinamica
+    int *d = malloc(patrones * sizeof(int));
+
+    if (X == NULL || d == NULL) {
+        ESP_LOGE(TAG, "No hay memoria");
+    }
+    else {
+        generar_patrones(X, n_entradas, patrones);
+        generar_tabla_verdad(d, patrones, compuerta);
+        print_tabla_verdad(X, d, n_entradas, patrones);
+        free(X);
+        free(d);
+    }
+    // ========================================================
 
     btn_state_old = gpio_get_level(BOTON);
 
@@ -55,12 +70,10 @@ void app_main(void) {
 
         if(system_ON) {
            adc_read();
-           print_adc_values(N);
+           print_adc_values(n_entradas);
            adc_to_binary();
            vTaskDelay(pdMS_TO_TICKS(200));
         }
         vTaskDelay(pdMS_TO_TICKS(10));  
     }
 }
-
-

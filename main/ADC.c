@@ -38,14 +38,14 @@ void adc_init(void)
     };
 
     // Configuración de los 5 canales
-    for (int i = 0; i < N; i++) {
+    for (int i = 0; i < n_entradas; i++) {
         adc_oneshot_config_channel(adc1_handle, pot_channels[i], &channel_config);
     }
 }
 
 void adc_read(void)
 {
-    for (int i = 0; i < N; i++)
+    for (int i = 0; i < n_entradas; i++)
     {
         adc_oneshot_read(adc1_handle, pot_channels[i], &adc_raw[i]);
     }   
@@ -53,7 +53,7 @@ void adc_read(void)
 
 void adc_to_binary(void)
 {
-    for (int i = 0; i < N; i++)
+    for (int i = 0; i < n_entradas; i++)
     {
         if (adc_raw[i] > UMBRAL_ADC)
             X_inputs[i] = 1; // Superó el umbral
