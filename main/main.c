@@ -65,11 +65,13 @@ void app_main(void) {
             if(system_ON) {
                 gpio_set_level(LED, true);
                 ESP_LOGI(TAG, "MODO RUN - Sistema Activado");
+                hmi_enviar_config(n_entradas, compuerta, w, b); // Manda la configuracion de HMI
             }
             else {
                 gpio_set_level(LED, false);
                 ESP_LOGI(TAG, "MODO OFF - Sistema Desactivado");
             }
+            hmi_enviar_estado(system_ON);                         // HMI: manda RUN u OFF
         }
         btn_state_old = btn_state;
 
@@ -84,6 +86,7 @@ void app_main(void) {
            }
            int salida = (producto_punto(w, x, n_entradas) + b >= 0.0) ? 1 : 0;
            ESP_LOGI(TAG, "Salida del perceptron = %d", salida);
+           hmi_enviar_datos(n_entradas, salida);                  // HMI: manda pots y salida
 
            vTaskDelay(pdMS_TO_TICKS(200));
         }

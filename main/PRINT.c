@@ -79,3 +79,27 @@ void print_resultados(const double *X, const int *d, const double *w, double b,
     }
     printf("\nClasificaciones correctas: %d/%d\n", aciertos, patrones);
 }
+
+// Interfaz grafica
+// CFG,n,compuerta,w1..wn,bias
+void hmi_enviar_config(int entradas, int compuerta, const double *w, double bias) {
+    printf("CFG,%d,%d", entradas, compuerta);
+    for (int j = 0; j < entradas; j++)
+        printf(",%.6f", w[j]);
+
+    printf(",%.6f\n", bias);
+}
+
+// STATE,RUN  o  STATE,OFF
+void hmi_enviar_estado(bool run) {
+    printf("STATE,%s\n", run ? "RUN" : "OFF");
+}
+
+// DATA,raw1..rawN,salida
+void hmi_enviar_datos(int entradas, int salida) {
+    printf("DATA");
+    for (int j = 0; j < entradas; j++)
+        printf(",%d", adc_raw[j]);
+
+    printf(",%d\n", salida);
+}
